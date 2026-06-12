@@ -5,21 +5,25 @@
 
   <p>
     <a href="https://expo.dev"><img src="https://img.shields.io/badge/platform-ios%20%7C%20android-000000?style=flat-square&logo=expo&logoColor=white" alt="platform" /></a>
-    <a href="https://github.com/guildpass/guildpass-mobile/actions"><img src="https://img.shields.io/github/actions/workflow/status/guildpass/guildpass-mobile/test.yml?branch=main&style=flat-square" alt="build status" /></a>
+    <a href="https://github.com/Adamantine-Guild/guildpass-mobile/actions"><img src="https://img.shields.io/github/actions/workflow/status/Adamantine-Guild/guildpass-mobile/test.yml?branch=main&style=flat-square" alt="build status" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="license" /></a>
     <a href="https://typescriptlang.org"><img src="https://img.shields.io/badge/typescript-%23007acc.svg?style=flat-square&logo=typescript&logoColor=white" alt="typescript" /></a>
+    <a href="https://contribute.grantfox.xyz"><img src="https://img.shields.io/badge/GrantFox-open%20for%20contributions-orange?style=flat-square" alt="GrantFox" /></a>
   </p>
 
   <p align="center">
     <a href="#-key-features">Key Features</a> •
     <a href="#-getting-started">Getting Started</a> •
     <a href="#-architecture">Architecture</a> •
+    <a href="#-testing">Testing</a> •
     <a href="#-roadmap">Roadmap</a> •
     <a href="#-contributing">Contributing</a>
   </p>
 </div>
 
 ---
+
+> **Part of the [Adamantine-Guild](https://github.com/Adamantine-Guild) project** — a Web3 membership and token-gated community platform built for the open-source ecosystem.
 
 ## 📱 Experience the Protocol
 
@@ -45,10 +49,15 @@ GuildPass Mobile is the official gateway to the GuildPass ecosystem for iOS and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/guildpass/guildpass-mobile.git
+git clone https://github.com/Adamantine-Guild/guildpass-mobile.git
+cd guildpass-mobile
 
 # Install dependencies
 pnpm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your API URL and chain ID
 ```
 
 ### Development
@@ -71,6 +80,34 @@ The application is built on a robust, feature-driven foundation designed for lon
 - **Styling**: [NativeWind](https://www.nativewind.dev/) for high-performance Tailwind CSS utility styling.
 - **SDK**: Seamless integration with the core [@guildpass/sdk](../guildpass-sdk).
 
+### Project structure
+
+| Path | Purpose |
+|---|---|
+| `app/` | Expo Router file-based pages and layouts |
+| `src/` | Feature modules, hooks, stores, and services |
+| `docs/` | Architecture and integration guides |
+| `tests/` | Vitest unit tests |
+
+## 🧪 Testing
+
+```bash
+# Run all tests (watch mode)
+pnpm test
+
+# Run tests once (CI mode)
+pnpm test:run
+
+# Type checking
+pnpm typecheck
+
+# Lint
+pnpm lint
+
+# Format
+pnpm format
+```
+
 ## 🗺️ Roadmap
 
 - [ ] **Native Wallet Integration**: Support for WalletConnect, MetaMask, and Coinbase Wallet.
@@ -81,11 +118,18 @@ The application is built on a robust, feature-driven foundation designed for lon
 
 ## 🤝 Contributing
 
-We welcome contributions from the community. Please review our [CONTRIBUTING.md](./CONTRIBUTING.md) to get started. Together, we're building the future of decentralized access control.
+We welcome contributions from the community! This repository is listed on **[GrantFox](https://contribute.grantfox.xyz)** for open contributions.
+
+1. Browse open issues tagged [`good first issue`](https://github.com/Adamantine-Guild/guildpass-mobile/issues?q=label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/Adamantine-Guild/guildpass-mobile/issues?q=label%3A%22help+wanted%22).
+2. Apply for an issue on [GrantFox](https://contribute.grantfox.xyz) or comment on the GitHub issue.
+3. Fork the repo, create a feature branch, implement your change, open a PR.
+4. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide.
+
+**Maintainer resources**: [Maintainer app](https://maintainer.grantfox.xyz) · [GrantFox docs](https://docs.grantfox.xyz) · maintainers@guildpass.xyz
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
 
 ---
 
