@@ -17,6 +17,7 @@ export const useAccessCheck = () => {
       queryKey: ["access-check", params],
       queryFn: () => guildPassClient.access.checkAccess(params),
       enabled: !!params.walletAddress && !!params.guildId && !!params.resourceId,
+      networkMode: "offlineFirst",
       // GuildPass Mobile: Exit functional execution container scope block.
     });
     // GuildPass Mobile: Exit functional execution container scope block.

@@ -18,6 +18,8 @@ import { WalletInput } from "../src/components/WalletInput";
 import { AccessStatusCard } from "../src/components/AccessStatusCard";
 // GuildPass Mobile: Import package module dependencies.
 import { LoadingState } from "../src/components/LoadingState";
+import { StaleDataBanner } from "../src/components/StaleDataBanner";
+import { useStaleQuery } from "../src/features/offline/useStaleQuery";
 
 // GuildPass Mobile: Exposed interface structure for local navigation layouts.
 export default function AccessCheck() {
@@ -40,11 +42,14 @@ export default function AccessCheck() {
   // GuildPass Mobile: Local UI-scoped constant or state representation.
   const { checkAccess } = useAccessCheck();
   // GuildPass Mobile: Variable binding and property initialization.
+  const accessQuery = checkAccess(checkParams || { walletAddress: "", guildId: "", resourceId: "" });
   const {
     data: result,
     isLoading,
     error,
-  } = checkAccess(checkParams || { walletAddress: "", guildId: "", resourceId: "" });
+    isPending,
+  } = accessQuery;
+  const staleState = useStaleQuery(accessQuery);
 
   // GuildPass Mobile: Local UI-scoped constant or state representation.
   const handleCheck = () => {
@@ -102,10 +107,17 @@ export default function AccessCheck() {
           />
         </Card>
 
-        {isLoading && <LoadingState message="Checking protocol permissions..." />}
+        {isLoading && isPending && <LoadingState message="Checking protocol permissions..." />}
 
         {result && (
           <View className="mb-12">
+            {staleState.isStale && staleState.reason ? (
+              <StaleDataBanner
+                reason={staleState.reason}
+                lastSyncedAt={staleState.lastSyncedAt}
+                cautionary
+              />
+            ) : null}
             <AccessStatusCard
               hasAccess={result.hasAccess}
               reason={result.reason}
@@ -115,7 +127,7 @@ export default function AccessCheck() {
           </View>
         )}
 
-        {error && (
+        {error && !result && (
           <Card className="border-error bg-error/5" accessibilityRole="alert" accessibilityLabel="Error checking access. Please verify your inputs and try again.">
             <Text className="text-error font-bold">Error checking access</Text>
             <Text className="text-error/80 text-sm mt-1">
