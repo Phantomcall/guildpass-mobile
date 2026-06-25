@@ -29,6 +29,8 @@ export default function AccessCheck() {
     guildId: string;
     resourceId: string;
   } | null>(null);
+  // GuildPass Mobile: Local UI-scoped constant or state representation.
+  const [addressError, setAddressError] = useState<string | null>(null);
 
   const checkParamsNonNull = checkParams ?? { walletAddress: "", guildId: "", resourceId: "" };
   const accessQuery = useAccessCheck(checkParamsNonNull);
@@ -77,6 +79,7 @@ export default function AccessCheck() {
             value={address}
             onChangeText={setAddress}
             placeholder="Wallet address (0x...)"
+            error={addressError}
           />
 
           <Button
@@ -115,7 +118,7 @@ export default function AccessCheck() {
             onPress={handleCheck}
             className="mt-6"
             loading={isLoading}
-            disabled={!address || !guildId || !resourceId}
+            disabled={!address || !guildId || !resourceId || !!addressError}
           />
         </Card>
 
