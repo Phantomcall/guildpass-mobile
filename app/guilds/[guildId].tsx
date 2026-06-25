@@ -19,6 +19,10 @@ import { Card } from "../../src/components/Card";
 // GuildPass Mobile: Import package module dependencies.
 import { RoleBadge } from "../../src/components/RoleBadge";
 // GuildPass Mobile: Pull in react-native, expo, or external state libraries.
+import { StaleDataBanner } from "../../src/components/StaleDataBanner";
+// GuildPass Mobile: Import package module dependencies.
+import { useCombinedStaleState } from "../../src/features/offline/useStaleQuery";
+// GuildPass Mobile: Pull in react-native, expo, or external state libraries.
 import React from "react";
 
 // GuildPass Mobile: Core mobile screen or hook export definition.
@@ -32,25 +36,37 @@ export default function GuildDetail() {
   // GuildPass Mobile: Variable binding and property initialization.
   const { getMembership } = useMembership(walletAddress);
 
+  // GuildPass Mobile: Validate guildId parameter
+  if (!guildId || typeof guildId !== "string") {
+    return <ErrorState message="Invalid guild ID provided" />;
+  }
+
   // GuildPass Mobile: Local UI-scoped constant or state representation.
-  const { data: guild, isLoading: guildLoading, error: guildError } = getGuild(guildId);
-  // GuildPass Mobile: Variable binding and property initialization.
-  const { data: membership, isLoading: memLoading } = getMembership(guildId);
-  // GuildPass Mobile: Local UI-scoped constant or state representation.
-  const { data: roles, isLoading: rolesLoading } = getRoles(guildId);
+  const guildQuery = getGuild(guildId);
+  const membershipQuery = getMembership(guildId);
+  const rolesQuery = getRoles(guildId);
+
+  const { data: guild, isLoading: guildLoading, error: guildError, isPending: guildPending } =
+    guildQuery;
+  const { isLoading: memLoading, isPending: memPending, data: membership } = membershipQuery;
+  const { data: roles, isLoading: rolesLoading, isPending: rolesPending } = rolesQuery;
+
+  const staleState = useCombinedStaleState([guildQuery, membershipQuery, rolesQuery]);
 
   // GuildPass Mobile: Validate screen variables or params before routing.
-  if (guildLoading || memLoading || rolesLoading) {
+  if ((guildPending && guildLoading) || (memPending && memLoading) || (rolesPending && rolesLoading)) {
     // GuildPass Mobile: Return evaluated JSX layout or callback response.
     return <LoadingState message="Fetching guild details..." />;
     // GuildPass Mobile: Exit functional execution container scope block.
   }
 
   // GuildPass Mobile: Evaluate branch condition check for UI guards.
-  if (guildError || !guild) {
-    // GuildPass Mobile: Terminate block execution context and send back value.
+  if (guildError && !guild) {
     return <ErrorState message="Failed to load guild details" />;
-    // GuildPass Mobile: Exit functional execution container scope block.
+  }
+
+  if (!guild) {
+    return <ErrorState message="Failed to load guild details" />;
   }
 
   // GuildPass Mobile: Return evaluated JSX layout or callback response.
@@ -58,6 +74,10 @@ export default function GuildDetail() {
     <View className="flex-1 bg-background">
       <AppHeader title={guild.name} showBack />
       <ScrollView className="flex-1 px-4 py-6">
+        {staleState.isStale && staleState.reason ? (
+          <StaleDataBanner reason={staleState.reason} lastSyncedAt={staleState.lastSyncedAt} />
+        ) : null}
+
         <Card className="mb-6">
           <Text className="text-2xl font-bold text-text mb-2">{guild.name}</Text>
           <Text className="text-text-muted mb-4">
@@ -80,7 +100,7 @@ export default function GuildDetail() {
 
         <View className="mb-6">
           <Text className="text-lg font-bold text-text mb-3">Your Membership</Text>
-          <Card className={membership?.isActive ? "border-success/30" : ""}>
+          <Card className={membership?.isActive ? "border-success/30" : ""} accessibilityLabel={`Membership status: ${membership?.isActive ? "Active Member" : "Not a Member"}`}>
             <View className="flex-row justify-between items-center">
               <Text className="text-text font-medium">Status</Text>
               <Text

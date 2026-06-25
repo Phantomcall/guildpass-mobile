@@ -14,6 +14,8 @@ import { Card } from "../src/components/Card";
 import { WalletInput } from "../src/components/WalletInput";
 // GuildPass Mobile: Import package module dependencies.
 import { Button } from "../src/components/Button";
+import { StaleDataBanner } from "../src/components/StaleDataBanner";
+import { useNetworkStatus } from "../src/features/offline/useNetworkStatus";
 
 // GuildPass Mobile: Exported screen, component definition, or state hooks.
 export default function Profile() {
@@ -21,6 +23,7 @@ export default function Profile() {
   const router = useRouter();
   // GuildPass Mobile: Local UI-scoped constant or state representation.
   const { walletAddress, isConnected, connectManually, disconnect } = useWallet();
+  const { isOffline } = useNetworkStatus();
   // GuildPass Mobile: Variable binding and property initialization.
   const [inputValue, setInputValue] = useState(walletAddress || "");
   // GuildPass Mobile: Local UI-scoped constant or state representation.
@@ -65,6 +68,8 @@ export default function Profile() {
           </View>
         ) : (
           <View>
+            {isOffline ? <StaleDataBanner reason="offline" /> : null}
+
             <Card className="mb-6">
               <Text className="text-text-muted text-sm mb-1">CONNECTED WALLET</Text>
               <Text className="text-lg font-bold text-text mb-4" numberOfLines={1}>
@@ -78,6 +83,9 @@ export default function Profile() {
                 onPress={() => router.push("/guilds")}
                 activeOpacity={0.7}
                 className="mb-4"
+                accessibilityRole="link"
+                accessibilityLabel="My Guilds"
+                accessibilityHint="View your memberships and roles"
               >
                 <Card className="flex-row justify-between items-center">
                   <View>
@@ -92,6 +100,9 @@ export default function Profile() {
                 onPress={() => router.push("/access-check")}
                 activeOpacity={0.7}
                 className="mb-4"
+                accessibilityRole="link"
+                accessibilityLabel="Access Check"
+                accessibilityHint="Verify resource access status"
               >
                 <Card className="flex-row justify-between items-center">
                   <View>
@@ -106,6 +117,9 @@ export default function Profile() {
                 onPress={() => router.push("/settings")}
                 activeOpacity={0.7}
                 className="mb-4"
+                accessibilityRole="link"
+                accessibilityLabel="App Settings"
+                accessibilityHint="Configuration and info"
               >
                 <Card className="flex-row justify-between items-center">
                   <View>
