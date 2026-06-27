@@ -3,7 +3,7 @@ import { useWallet } from "../src/features/wallet/useWallet";
 import { AppHeader } from "../src/components/AppHeader";
 import { Card } from "../src/components/Card";
 import { Button } from "../src/components/Button";
-import Constants from "expo-constants";
+import { appConfig } from "../src/config/appConfig";
 import { resetAppState } from "../src/lib/resetAppState";
 import React, { useState } from "react";
 
@@ -20,8 +20,8 @@ export default function Settings() {
     }
   };
 
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl ?? "https://api.guildpass.xyz";
-  const chainId = Constants.expoConfig?.extra?.chainId ?? 8453;
+  const apiUrl = appConfig.apiUrl;
+  const chainId = appConfig.chainId;
 
   return (
     <View className="flex-1 bg-background" testID="settings-screen">

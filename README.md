@@ -184,6 +184,11 @@ See [docs/release.md](./docs/release.md) for the full release guide, environment
 
 Copy `.env.example` to `.env` and fill in your values. Environment variables prefixed with `EXPO_PUBLIC_` are available at runtime. Sensitive values must be stored as EAS Secrets.
 
+**Configuration Validation:**
+The application uses a typed configuration layer to validate environment variables on startup.
+- `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_CHAIN_ID` are required and strictly validated.
+- If they are missing or invalid, the app will throw a clear developer-facing error in development, preventing silent, unsafe fallbacks to production defaults.
+
 ## QR access check payload
 
 QR access checks use a JSON payload encoded directly in the QR code:
