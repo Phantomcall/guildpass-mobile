@@ -47,7 +47,9 @@ vi.mock("../src/lib/guildpassClient", () => ({
   },
 }));
 
-vi.mock("expo-constants", () => ({ default: { expoConfig: { extra: {} } } }));
+vi.mock("expo-constants", () => ({
+  default: { expoConfig: { extra: { apiUrl: "https://api.guildpass.test", chainId: 1 } } },
+}));
 
 vi.mock("expo-router", () => ({
   useRouter: () => ({ push: routerMocks.push, back: routerMocks.back }),

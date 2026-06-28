@@ -20,8 +20,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
+
+      - name: Checkout SDK
+        run: |
+          git clone --depth 1 https://github.com/Adamantine-Guild/guildpass-sdk.git "${{ github.workspace }}/../guildpass-sdk"
+
+      - name: Apply SDK patches
+        run: |
+          cd "${{ github.workspace }}/../guildpass-sdk"
+          git apply "${{ github.workspace }}/patches/guildpass-sdk.patch"
 
       - name: Install dependencies
         run: npm ci
@@ -86,8 +95,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
+
+      - name: Checkout SDK
+        run: |
+          git clone --depth 1 https://github.com/Adamantine-Guild/guildpass-sdk.git "${{ github.workspace }}/../guildpass-sdk"
+
+      - name: Apply SDK patches
+        run: |
+          cd "${{ github.workspace }}/../guildpass-sdk"
+          git apply "${{ github.workspace }}/patches/guildpass-sdk.patch"
 
       - name: Install dependencies
         run: npm ci
@@ -95,8 +113,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Install Maestro
         run: |
